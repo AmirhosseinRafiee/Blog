@@ -1,0 +1,10 @@
+Django>3.2,<3.3
+pillow
+django-multi-captcha-admin
+django-robots
+django-simple-captcha
+django-summernote
+django-taggit
+django-debug-toolbar
+django_extensions
+python-decouple
