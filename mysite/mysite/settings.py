@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'accounts'
 ]
 
-
+AUTH_USER_MODEL = "accounts.User"
 
 # robots
 ROBOTS_USE_HOST = True

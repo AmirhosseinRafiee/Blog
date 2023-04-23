@@ -1,5 +1,4 @@
 from django import template
-from blog.admin import PostAdmin
 from blog.models import Category, Post, Comment
 
 register = template.Library()
