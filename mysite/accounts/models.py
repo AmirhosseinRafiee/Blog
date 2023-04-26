@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
+
 
 class CustomUserManager(BaseUserManager):
     """
@@ -66,3 +66,6 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.email
+
+    def get_full_name(self):
+        return self.first_name + ' ' + self.last_name

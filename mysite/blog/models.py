@@ -1,7 +1,9 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.timezone import now
 from taggit.managers import TaggableManager
 from accounts.models import Profile
+
 class Category(models.Model):
   name = models.CharField(max_length=255)
 
@@ -17,11 +19,11 @@ class Post(models.Model):
   title = models.CharField(max_length=255)
   content = models.TextField()
   category = models.ManyToManyField(Category)
-  tags = TaggableManager()
+  tags = TaggableManager(blank=True)
   counted_view = models.PositiveIntegerField(default=0)
   status = models.BooleanField(default=False)
   login_require = models.BooleanField(default=False)
-  published_date = models.DateTimeField(null=True)
+  published_date = models.DateTimeField(default=now ,null=True)
   created_date = models.DateTimeField(auto_now_add=True)
   updated_date = models.DateTimeField(auto_now=True)
   class Meta:

@@ -5,11 +5,12 @@ from blog.feeds import LatestEntriesFeed
 app_name = 'blog'
 
 urlpatterns = [
-    path('', views.blog, name='index'),
-    path('<int:pid>', views.blog_single, name='single'),
-    path('category/<str:cat_name>', views.blog, name='category'),
-    path('tag/<str:tag_name>', views.blog, name='tag'),
-    path('author/<str:author_username>', views.blog, name='author'),
-    path('search', views.blog_search, name='search'),  
+    path('', views.BlogView.as_view(), name='index'),
+    path('<int:pid>/', views.BlogSingleView.as_view(), name='single'),
+    path('comment/<int:pid>/', views.CommentView.as_view(), name='comment'),
+    path('category/<str:cat_name>/', views.BlogView.as_view(), name='category'),
+    path('tag/<str:tag_name>/', views.BlogView.as_view(), name='tag'),
+    path('author/<int:author_profile_id>/', views.BlogView.as_view(), name='author'),
+    # path('search/', views.blog_search, name='search'),  
     path('rss/feed/', LatestEntriesFeed()),
 ]

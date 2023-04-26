@@ -45,8 +45,12 @@
           <div class="col-lg-6 col-sm-6 col-6 header-top-left">
             <ul>
               {% if request.user.is_authenticated %}
-              <li><a href="#">Logged in as {{request.user.username}}</a></li>
-              <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+              <li><a href="#">Logged in as {{request.user.get_full_name|default:'user'}}</a></li>
+              <li>
+              <form method="post" action="{% url 'accounts:logout' %}" id="logout_form">
+                {% csrf_token %}
+                <input type="submit" value="Logout now">
+              </form></li>
               {% else %}
               <li><a href="{% url 'accounts:login' %}">Login</a></li>
               <li><a href="{% url 'accounts:signup' %}">Signup</a></li>
@@ -130,7 +134,7 @@
               mediocre print and graphic output.
             </p>
             <div>
-              <form action="{% url 'website:newsletter' %}" method="post" class="subscription relative">
+              <form action="{% url 'website:newsletter' %}?lastPage={{request.path}}" method="post" class="subscription relative">
                 {% csrf_token %}
                 <div class="input-group d-flex flex-row">
                   <input name="email" placeholder="Email Address" onfocus="this.placeholder = ''"
