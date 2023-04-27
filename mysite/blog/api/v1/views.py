@@ -100,7 +100,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 #     serializer_class = PostSerializer
 
 class PostViewSet(ModelViewSet):
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly ,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
 
     def get_queryset(self):
@@ -109,14 +109,4 @@ class PostViewSet(ModelViewSet):
             posts = posts.filter(login_require=False)
         return posts
     
-# Example for ViewSet in Class Based View
-# class PostViewSet(ModelViewSet):
-#     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-#     queryset = Post.objects.filter(status=True)
-#     serializer_class = PostSerializer
-    # filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    # filterset_fields = {'category':["exact","in"], 'author':["exact"],'status':["exact"]}
-    # filterset_class = PostFilters
-    # search_fields = ["title", "content"]
-    # ordering_fields = ["published_date"]
-    # pagination_class = DefaultPagination
+
