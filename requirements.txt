@@ -11,3 +11,4 @@ python-decouple
 djangorestframework
 markdown
 django-filter
+# coreapi
