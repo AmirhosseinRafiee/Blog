@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.views import Response, APIView
+from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from ...models import Post
@@ -73,9 +74,34 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 #         post.delete()
 #         return Response({'detail': 'item removed successfully'}, status=status.HTTP_204_NO_CONTENT)
 
-class PostListApiView(ListCreateAPIView):
+# class PostListApiView(ListCreateAPIView):
+#     serializer_class = PostSerializer
+#     permission_classes = [IsAuthenticatedOrReadOnly]
+
+#     def get_queryset(self):
+#         posts = Post.objects.filter(status=True, published_date__lte=timezone.now())
+#         if not self.request.user.is_authenticated:
+#             posts = posts.filter(login_require=False)
+#         return posts
+    
+# class PostDetailApiView(RetrieveUpdateDestroyAPIView):
+#     serializer_class = PostSerializer
+#     permission_classes = [IsAuthenticatedOrReadOnly]
+
+#     def get_queryset(self):
+#         posts = Post.objects.filter(status=True, published_date__lte=timezone.now())
+#         if not self.request.user.is_authenticated:
+#             posts = posts.filter(login_require=False)
+#         return posts
+    
+# class PostViewSet(ViewSet):
+#     permission_classes = [IsAuthenticatedOrReadOnly]
+#     queryset = Post.objects.filter(status=True)
+#     serializer_class = PostSerializer
+
+class PostViewSet(ModelViewSet):
+    permission_classes = [IsOwnerOrReadOnly]
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         posts = Post.objects.filter(status=True, published_date__lte=timezone.now())
@@ -83,12 +109,14 @@ class PostListApiView(ListCreateAPIView):
             posts = posts.filter(login_require=False)
         return posts
     
-class PostDetailApiView(RetrieveUpdateDestroyAPIView):
-    serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
-    def get_queryset(self):
-        posts = Post.objects.filter(status=True, published_date__lte=timezone.now())
-        if not self.request.user.is_authenticated:
-            posts = posts.filter(login_require=False)
-        return posts
+# Example for ViewSet in Class Based View
+# class PostViewSet(ModelViewSet):
+#     permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+#     queryset = Post.objects.filter(status=True)
+#     serializer_class = PostSerializer
+    # filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    # filterset_fields = {'category':["exact","in"], 'author':["exact"],'status':["exact"]}
+    # filterset_class = PostFilters
+    # search_fields = ["title", "content"]
+    # ordering_fields = ["published_date"]
+    # pagination_class = DefaultPagination

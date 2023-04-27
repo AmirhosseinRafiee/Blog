@@ -22,6 +22,7 @@ from django.contrib.sitemaps.views import sitemap
 from website.sitemaps import StaticViewSitemap
 from blog.sitemaps import BlogSitemap
 from django.contrib.auth import views as auth_views
+from rest_framework.documentation import include_docs_urls	  	
 from accounts.urls import views as accounts_views
 
 sitemaps = {
@@ -39,6 +40,7 @@ urlpatterns = [
     path('robots.txt', include('robots.urls')),  
     path('captcha/', include('captcha.urls')),
     path('api-auth/', include('rest_framework.urls')),
+    path('api-docs/', include_docs_urls(title='api sample')),
     # path('auth_login', accounts_views.LoginView.as_view(), name='auth_login'),
     path('reset_password/', auth_views.PasswordResetView.as_view(), name='reset_password'),
     path('reset_password_sent/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
