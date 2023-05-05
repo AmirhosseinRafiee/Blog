@@ -12,6 +12,7 @@ from ...models import Post
 from .serializers import PostSerializer
 from .permissions import IsOwnerOrReadOnly
 from .filters import PostFilter, PostCustomOrderFilter
+from .paginations import CustomPagination
 
 # fbv
 # @api_view()
@@ -104,6 +105,7 @@ from .filters import PostFilter, PostCustomOrderFilter
 class PostViewSet(ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly ,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
+    pagination_class = CustomPagination
     filter_backends = [DjangoFilterBackend, SearchFilter, PostCustomOrderFilter]
     filterset_class = PostFilter
     search_fields = ['author__last_name', 'title', 'content']
