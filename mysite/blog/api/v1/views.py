@@ -5,11 +5,13 @@ from rest_framework.views import Response, APIView
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.filters import SearchFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from ...models import Post
 from .serializers import PostSerializer
 from .permissions import IsOwnerOrReadOnly
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from .filters import PostFilter, PostCustomOrderFilter
 
 # fbv
 # @api_view()
@@ -102,11 +104,16 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 class PostViewSet(ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly ,IsOwnerOrReadOnly]
     serializer_class = PostSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, PostCustomOrderFilter]
+    filterset_class = PostFilter
+    search_fields = ['author__last_name', 'title', 'content']
+    ordering_fields = ['published_date', 'counted_view']
+    # ordering = ['-published_date']
 
     def get_queryset(self):
         posts = Post.objects.filter(status=True, published_date__lte=timezone.now())
         if not self.request.user.is_authenticated:
             posts = posts.filter(login_require=False)
         return posts
-    
+
 
