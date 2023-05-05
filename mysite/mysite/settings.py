@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',
     'rest_framework',
 
+    'drf_yasg',
     'django_filters',
     'captcha',
     'django_summernote',
