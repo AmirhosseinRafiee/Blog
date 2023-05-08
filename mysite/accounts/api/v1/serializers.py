@@ -22,8 +22,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         except exceptions.ValidationError as e:
             raise serializers.ValidationError({'password': list(e)})
         return super().validate(attrs)
-    
+
     def create(self, validated_data):
         validated_data.pop('password2', None)
-        # return User.objects.create_user(**validated_data)
-        return super().create()
+        return User.objects.create_user(**validated_data)
