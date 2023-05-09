@@ -1,12 +1,14 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, RetrieveUpdateAPIView
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import RegistrationSerializer, CustomAuthTokenSerializer, CustomTokenObtainPairSerializer
+from ...models import Profile
+from .serializers import RegistrationSerializer, ChangePasswordSerializer, ProfileSerializer, CustomAuthTokenSerializer, CustomTokenObtainPairSerializer
 from .permissions import IsNotAuthenticated
 
 class UserRegisterApiView(GenericAPIView):
@@ -22,6 +24,30 @@ class UserRegisterApiView(GenericAPIView):
             }
             return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class ChangePasswordApiView(GenericAPIView):
+  serializer_class = ChangePasswordSerializer
+  permission_classes = [IsAuthenticated]
+
+  def put(self, request, *args, **kwargs):
+    user = request.user
+    serializer = self.serializer_class(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    if not user.check_password(serializer.validated_data['old_password']):
+      return Response({'old password': 'wrong password'}, status=status.HTTP_400_BAD_REQUEST)
+    user.set_password(serializer.validated_data['new_password'])
+    user.save()
+    return Response({'detail': 'password changed successfully'}, status=status.HTTP_200_OK)
+
+class ProfileApiView(RetrieveUpdateAPIView):
+  serializer_class = ProfileSerializer
+  permission_classes = [IsAuthenticated]
+  queryset = Profile.objects.all()
+  
+  def get_object(self):
+    profiles = self.get_queryset()
+    profile = get_object_or_404(profiles, user=self.request.user)
+    return profile
     
 class CustomObtainAuthToken(ObtainAuthToken):
   serializer_class = CustomAuthTokenSerializer

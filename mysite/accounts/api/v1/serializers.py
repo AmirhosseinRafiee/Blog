@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from ...models import Profile
 
 User = get_user_model()
 
@@ -30,6 +31,27 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop('password2', None)
         return User.objects.create_user(**validated_data)
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True, max_length=255)
+    new_password = serializers.CharField(required=True, max_length=255)
+    new_password2 = serializers.CharField(required=True, max_length=255)
+
+    def validate(self, attrs):
+        if attrs.get('new_password') != attrs.get('new_password2'):
+            raise serializers.ValidationError({'detail': 'passwords does not match'})
+        try:
+            validate_password(attrs.get('old_password'))
+        except exceptions.ValidationError as e:
+            raise serializers.ValidationError({'new password': list(e.messages)})     
+        return super().validate(attrs)
+    
+class ProfileSerializer(serializers.ModelSerializer):
+    email = serializers.CharField(source='user.email', read_only=True)
+    class Meta:
+        model = Profile
+        fields = ('id', 'email', 'first_name', 'last_name', 'image', 'description')
+        read_only_fields = ('id',)
 
 class CustomAuthTokenSerializer(serializers.Serializer):
     email = serializers.CharField(

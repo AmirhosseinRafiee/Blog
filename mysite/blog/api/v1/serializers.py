@@ -10,6 +10,13 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ('name', 'id')
         read_only_fields = ('id',)
 
+class AuthorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Profile
+        fields = ('first_name', 'last_name', 'image')
+        read_only_fields = ('first_name', 'last_name', 'image')
+
 class PostSerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField()
     snippet = serializers.ReadOnlyField(source='get_snippet')
@@ -31,6 +38,7 @@ class PostSerializer(TaggitSerializer, serializers.ModelSerializer):
         request = self.context.get('request')
         rep =  super().to_representation(instance)
         rep['category'] = CategorySerializer(instance.category, many=True).data
+        rep['author'] = AuthorSerializer(instance.author).data
         if request.parser_context.get('kwargs').get('pk'):
             rep.pop('snippet', None)
             rep.pop('relative_url', None)
