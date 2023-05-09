@@ -13,3 +13,4 @@ markdown
 django-filter
 # coreapi
 drf-yasg[validation]
+djangorestframework-simplejwt
