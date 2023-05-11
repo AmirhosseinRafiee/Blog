@@ -36,7 +36,12 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'django.contrib.sites',
     'django.contrib.sitemaps',
-
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt',
+    
+    'drf_yasg',
+    'django_filters',
     'captcha',
     'django_summernote',
     'robots',
@@ -202,3 +207,19 @@ EMAIL_HOST_PASSWORD = '***'
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+# restframework configuration
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    # ]
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+		'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+		'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+	    ]
+}

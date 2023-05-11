@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from blog import views
 from blog.feeds import LatestEntriesFeed
 
@@ -12,5 +12,6 @@ urlpatterns = [
     path('tag/<str:tag_name>/', views.BlogView.as_view(), name='tag'),
     path('author/<int:author_profile_id>/', views.BlogView.as_view(), name='author'),
     # path('search/', views.blog_search, name='search'),  
+    path('api/v1/', include('blog.api.v1.urls')),
     path('rss/feed/', LatestEntriesFeed()),
 ]

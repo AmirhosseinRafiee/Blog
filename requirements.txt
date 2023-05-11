@@ -8,3 +8,9 @@ django-taggit
 django-debug-toolbar
 django_extensions
 python-decouple
+djangorestframework
+markdown
+django-filter
+# coreapi
+drf-yasg[validation]
+djangorestframework-simplejwt

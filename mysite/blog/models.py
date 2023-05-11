@@ -35,7 +35,14 @@ class Post(models.Model):
     return self.title
 
   def get_absolute_url(self):
-    return reverse('blog:single', kwargs={'pid': self.id})
+    return reverse('blog:single', kwargs={'pk': self.id})
+  
+  def get_absolute_api_url(self):
+    return reverse('blog:api-v1:post-detail', kwargs={'pk': self.id})
+  
+  def get_snippet(self):
+    return self.content[:40]
+
 
 class Comment(models.Model):
   post = models.ForeignKey(Post, on_delete=models.CASCADE)

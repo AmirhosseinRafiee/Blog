@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 app_name = 'accounts'
@@ -10,4 +10,6 @@ urlpatterns = [
     path('logout/', views.LogoutView.as_view(), name='logout'),
     # signup
     path('signup/', views.SignupView.as_view(), name='signup'),
+    # api
+    path('api/v1/', include('accounts.api.v1.urls'))
 ]
