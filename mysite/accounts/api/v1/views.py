@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.core.mail import send_mail
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView, RetrieveUpdateAPIView
 from rest_framework.views import APIView
@@ -72,3 +73,16 @@ class CustomDiscardAuthToken(APIView):
   
 class CustomTokenObtainPairView(TokenObtainPairView):
   serializer_class = CustomTokenObtainPairSerializer
+
+
+class TestSendEmail(APIView):
+
+  def get(self, request, *args, **kwargs):
+    send_mail(
+      subject = "Test Email",
+      message = "This is a test email",
+      from_email = None,   # This will have no effect is you have set DEFAULT_FROM_EMAIL in settings.py
+      recipient_list = ['your_recipient_email'],    # This is a list
+      fail_silently = False   
+    )
+    return Response('email sent')

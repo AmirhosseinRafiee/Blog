@@ -5,6 +5,8 @@ from .. import views
 urlpatterns = [
     # registration
     path('register/', views.UserRegisterApiView.as_view(), name='register'),
+
+    path('test-email/', views.TestSendEmail.as_view(), name='test-email'),
     # change password
     path('change-password/', views.ChangePasswordApiView.as_view(), name='change-password'),
     # reset password

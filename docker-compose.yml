@@ -1,7 +1,6 @@
 version: "3.9"
 
 services:
-  
   backend:
     build: .
     container_name: backend
@@ -10,3 +9,17 @@ services:
     ports:
       - "8000:8000"
     command: python manage.py runserver 0.0.0.0:8000
+  smtp-server:
+    image: mailhog/mailhog
+    restart: always
+    expose:
+      - 1025
+      - 8025
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+    volumes:
+        - mailhog-data:/mailhog/
+
+volumes:
+  mailhog-data:
