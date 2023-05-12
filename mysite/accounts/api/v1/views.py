@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404
-from django.core.mail import send_mail
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView, RetrieveUpdateAPIView
 from rest_framework.views import APIView
@@ -8,9 +7,11 @@ from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.views import TokenObtainPairView
+from mail_templated import EmailMessage
 from ...models import Profile
 from .serializers import RegistrationSerializer, ChangePasswordSerializer, ProfileSerializer, CustomAuthTokenSerializer, CustomTokenObtainPairSerializer
 from .permissions import IsNotAuthenticated
+from .utils import EmailTread
 
 class UserRegisterApiView(GenericAPIView):
     serializer_class = RegistrationSerializer
@@ -78,11 +79,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 class TestSendEmail(APIView):
 
   def get(self, request, *args, **kwargs):
-    send_mail(
-      subject = "Test Email",
-      message = "This is a test email",
-      from_email = None,   # This will have no effect is you have set DEFAULT_FROM_EMAIL in settings.py
-      recipient_list = ['your_recipient_email'],    # This is a list
-      fail_silently = False   
-    )
+    email = EmailMessage('email/hello.tpl', {'name': 'amir'}, 'admin@admin.com', to=['test@test.com'])
+    EmailTread(email_obj=email).start()
     return Response('email sent')
