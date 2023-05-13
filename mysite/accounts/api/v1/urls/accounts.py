@@ -5,6 +5,10 @@ from .. import views
 urlpatterns = [
     # registration
     path('register/', views.UserRegisterApiView.as_view(), name='register'),
+    #path('activation/confirm/')
+    path('activation/confirm/<str:token>',views.ActivationApiView.as_view(),name='activation'),
+    # resend activation
+    path('activation/resend/',views.ActivationResendApiView.as_view(),name='activation-resend'),
     # change password
     path('change-password/', views.ChangePasswordApiView.as_view(), name='change-password'),
     # reset password
@@ -15,4 +19,5 @@ urlpatterns = [
     path('jwt/create/', views.CustomTokenObtainPairView.as_view(), name='jwt-create'),
     path('jwt/refresh/', TokenRefreshView.as_view(), name='jwt-refresh'),
     path('jwt/verify/', TokenVerifyView.as_view(), name='jwt-verify'),
+    # path('test-email/', views.TestSendEmail.as_view(), name='test-email'),
 ]
