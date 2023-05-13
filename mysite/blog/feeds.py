@@ -1,7 +1,6 @@
-from os import truncate
 from django.contrib.syndication.views import Feed
-from django.urls import reverse
 from blog.models import Post
+
 
 class LatestEntriesFeed(Feed):
     title = "newest blog posts"

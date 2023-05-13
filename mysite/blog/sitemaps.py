@@ -2,6 +2,7 @@ from django.contrib.sitemaps import Sitemap
 from blog.models import Post
 from django.urls import reverse
 
+
 class BlogSitemap(Sitemap):
     changefreq = "weekly"
     priority = 0.5
@@ -13,4 +14,4 @@ class BlogSitemap(Sitemap):
         return obj.published_date
 
     def location(self, item):
-        return reverse('blog:single', kwargs={'pid': item.id})
+        return reverse("blog:single", kwargs={"pid": item.id})

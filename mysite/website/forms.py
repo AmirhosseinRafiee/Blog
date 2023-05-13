@@ -2,26 +2,27 @@ from django import forms
 from captcha.fields import CaptchaField
 from .models import Contact, Newsletter
 
+
 class NameForm(forms.Form):
     name = forms.CharField(max_length=255)
 
 
 class ContactForm(forms.ModelForm):
     captcha = CaptchaField()
+
     class Meta:
         model = Contact
-        fields = '__all__'
+        fields = "__all__"
 
     def __init__(self, *args, **kwargs):
         super(ContactForm, self).__init__(*args, **kwargs)
-        self.fields['subject'].required = False
+        self.fields["subject"].required = False
 
 
 class NewsletterForm(forms.ModelForm):
-
-    class Meta():
+    class Meta:
         model = Newsletter
-        fields = '__all__'
+        fields = "__all__"
 
     def is_valid(self):
         email = self.data["email"]
